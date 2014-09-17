@@ -1,10 +1,11 @@
 require "sinatra"
 require "json"
+require_relative "redis_driver"
 
 db = {
-  match_requests: [],
-  matches: [],
-  results: []
+  match_requests: RedisDriver.new("match_requests"),
+  matches: RedisDriver.new("matches"),
+  results: RedisDriver.new("results"),
 }
 
 delete "/all" do
