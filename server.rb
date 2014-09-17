@@ -17,46 +17,39 @@ put "/match_requests/:id" do |id|
   payload = JSON.parse(request.body.read)
   player_id = payload.fetch("player")
 
-  log "New request from #{player_id}"
+  record_match_request(db, id, player_id)
 
   open_match_request_id, open_match_request = first_open_match_request(db, player_id)
-
   if open_match_request
-    log "Open match request: #{open_match_request}"
-    player_1 = open_match_request[:requester_id]
-
-    db[:matches] << { id: SecureRandom.uuid,
-                      match_request_1_id: open_match_request_id,
-                      match_request_2_id: id,
-                      player_1: player_1,
-                      player_2: player_id }
-
-    log "Matches are now: #{db[:matches]}"
-  else
-    log "No open match request!"
+    record_match(db, open_match_request_id, open_match_request, id, player_id)
   end
-
-  db[:match_requests][id] = { requester_id: player_id }
-
-  log "Unfulfilled requests is now: #{unfulfilled_match_requests(db)}"
 
   [200, {}, []]
 end
 
+def record_match(db, open_match_request_id, open_match_request, request_id, requester_id)
+  db[:matches] << { id: SecureRandom.uuid,
+                    match_request_1_id: open_match_request_id,
+                    match_request_2_id: request_id,
+                    player_1: open_match_request[:requester_id],
+                    player_2: requester_id }
+end
+
+def record_match_request(db, request_id, requester_id)
+  db[:match_requests][request_id] = { requester_id: requester_id }
+end
+
 get "/match_requests/:id" do |match_request_id|
   match_request = db[:match_requests][match_request_id]
-  log "Checking on request #{match_request}"
   found_match = find_unplayed_match(db, match_request)
 
   if found_match
-    log "Found match: #{found_match}"
     [
       200,
       { "Content-Type" => "application/json" },
       [ { match_id: found_match[:id] }.to_json ]
     ]
   else
-    log "No match found!"
     [
       404,
       { "Content-Type" => "application/json" },
@@ -67,7 +60,6 @@ end
 
 post "/results" do
   result = JSON.parse(request.body.read)
-  log "Result in: #{result}"
   db[:results] << { match_id: result["match_id"],
                     winner: result["winner"],
                     loser: result["loser"] }
@@ -76,10 +68,6 @@ post "/results" do
     { "Location" => "/some/place" },
     []
   ]
-end
-
-def log(msg)
-  puts "***************** #{msg}"
 end
 
 def base_uri(request)
@@ -102,11 +90,7 @@ def unfulfilled_match_requests(db)
 end
 
 def first_open_match_request(db, player_id)
-  log "Looking for an open match request for #{player_id}"
-
   unfulfilled_match_requests(db).detect { |match_request_id, match_request|
-    log "Does this suit? #{match_request}"
-
     results_involving_player = db[:results].select { |result|
       [result[:winner], result[:loser]].include?(player_id)
     }
@@ -114,15 +98,6 @@ def first_open_match_request(db, player_id)
       result[:winner] == player_id ? result[:loser] : result[:winner]
     }
     inappropriate_opponents = previous_opponents + [player_id]
-
-    !inappropriate_opponents.include?(match_request[:requester_id]).tap do |result|
-      log(
-        result ? "Yes!" : [
-          "No!",
-          "previous: #{previous_opponents}",
-          "inappropriate: #{inappropriate_opponents}",
-        ].join("\n")
-      )
-    end
+    !inappropriate_opponents.include?(match_request[:requester_id])
   }
 end
