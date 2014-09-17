@@ -7,55 +7,6 @@ db = {
   results: []
 }
 
-def log(msg)
-  puts "***************** #{msg}"
-end
-
-def base_uri(request)
-  "#{request.scheme}://#{request.host}:#{request.port}"
-end
-
-def find_unplayed_match(db, match_request)
-  played_match_ids = db[:results].map { |result| result[:match_id] }
-  db[:matches].
-    reject { |match| played_match_ids.include?(match[:id]) }.
-    detect { |match| match.values_at(:player_1, :player_2).include?(match_request[:requester_id]) }
-end
-
-def unfulfilled_match_requests(db)
-  db[:match_requests].select { |match_request_id, match_request|
-    db[:matches].none? { |match|
-      match.values_at(:match_request_1_id, :match_request_2_id).include?(match_request_id)
-    }
-  }
-end
-
-def first_open_match_request(db, player_id)
-  log "Looking for an open match request for #{player_id}"
-
-  unfulfilled_match_requests(db).detect { |match_request_id, match_request|
-    log "Does this suit? #{match_request}"
-
-    results_involving_player = db[:results].select { |result|
-      [result[:winner], result[:loser]].include?(player_id)
-    }
-    previous_opponents = results_involving_player.map { |result|
-      result[:winner] == player_id ? result[:loser] : result[:winner]
-    }
-    inappropriate_opponents = previous_opponents + [player_id]
-
-    !inappropriate_opponents.include?(match_request[:requester_id]).tap do |result|
-      log(
-        result ? "Yes!" : [
-          "No!",
-          "previous: #{previous_opponents}",
-          "inappropriate: #{inappropriate_opponents}",
-        ].join("\n")
-      )
-    end
-  }
-end
-
 delete "/all" do
   db[:match_requests].clear
   db[:matches].clear
@@ -125,4 +76,53 @@ post "/results" do
     { "Location" => "/some/place" },
     []
   ]
+end
+
+def log(msg)
+  puts "***************** #{msg}"
+end
+
+def base_uri(request)
+  "#{request.scheme}://#{request.host}:#{request.port}"
+end
+
+def find_unplayed_match(db, match_request)
+  played_match_ids = db[:results].map { |result| result[:match_id] }
+  db[:matches].
+    reject { |match| played_match_ids.include?(match[:id]) }.
+    detect { |match| match.values_at(:player_1, :player_2).include?(match_request[:requester_id]) }
+end
+
+def unfulfilled_match_requests(db)
+  db[:match_requests].select { |match_request_id, match_request|
+    db[:matches].none? { |match|
+      match.values_at(:match_request_1_id, :match_request_2_id).include?(match_request_id)
+    }
+  }
+end
+
+def first_open_match_request(db, player_id)
+  log "Looking for an open match request for #{player_id}"
+
+  unfulfilled_match_requests(db).detect { |match_request_id, match_request|
+    log "Does this suit? #{match_request}"
+
+    results_involving_player = db[:results].select { |result|
+      [result[:winner], result[:loser]].include?(player_id)
+    }
+    previous_opponents = results_involving_player.map { |result|
+      result[:winner] == player_id ? result[:loser] : result[:winner]
+    }
+    inappropriate_opponents = previous_opponents + [player_id]
+
+    !inappropriate_opponents.include?(match_request[:requester_id]).tap do |result|
+      log(
+        result ? "Yes!" : [
+          "No!",
+          "previous: #{previous_opponents}",
+          "inappropriate: #{inappropriate_opponents}",
+        ].join("\n")
+      )
+    end
+  }
 end
