@@ -89,7 +89,7 @@ put "/match_requests/:id" do |id|
 
   log "Unfulfilled requests is now: #{unfulfilled_match_requests(db)}"
 
-  [201, { "Location" => "#{base_uri(request)}/match_requests/#{id}"}, []]
+  [200, {}, []]
 end
 
 get "/match_requests/:id" do |match_request_id|
