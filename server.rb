@@ -2,7 +2,7 @@ require "sinatra"
 require "json"
 
 db = {
-  match_requests: {},
+  match_requests: [],
   matches: [],
   results: []
 }
@@ -19,28 +19,28 @@ put "/match_requests/:id" do |id|
 
   record_match_request(db, id, player_id)
 
-  open_match_request_id, open_match_request = first_open_match_request(db, player_id)
+  open_match_request = first_open_match_request(db, player_id)
   if open_match_request
-    record_match(db, open_match_request_id, open_match_request, id, player_id)
+    record_match(db, open_match_request, id, player_id)
   end
 
   [200, {}, []]
 end
 
-def record_match(db, open_match_request_id, open_match_request, request_id, requester_id)
+def record_match(db, open_match_request, request_id, requester_id)
   db[:matches] << { id: SecureRandom.uuid,
-                    match_request_1_id: open_match_request_id,
+                    match_request_1_id: open_match_request[:id],
                     match_request_2_id: request_id,
                     player_1: open_match_request[:requester_id],
                     player_2: requester_id }
 end
 
 def record_match_request(db, request_id, requester_id)
-  db[:match_requests][request_id] = { requester_id: requester_id }
+  db[:match_requests] << { id: request_id, requester_id: requester_id }
 end
 
 get "/match_requests/:id" do |match_request_id|
-  match_request = db[:match_requests][match_request_id]
+  match_request = db[:match_requests].detect { |match_request| match_request[:id] == match_request_id }
   found_match = find_unplayed_match(db, match_request)
 
   if found_match
@@ -82,15 +82,15 @@ def find_unplayed_match(db, match_request)
 end
 
 def unfulfilled_match_requests(db)
-  db[:match_requests].select { |match_request_id, match_request|
+  db[:match_requests].select { |match_request|
     db[:matches].none? { |match|
-      match.values_at(:match_request_1_id, :match_request_2_id).include?(match_request_id)
+      match.values_at(:match_request_1_id, :match_request_2_id).include?(match_request[:id])
     }
   }
 end
 
 def first_open_match_request(db, player_id)
-  unfulfilled_match_requests(db).detect { |match_request_id, match_request|
+  unfulfilled_match_requests(db).detect { |match_request|
     results_involving_player = db[:results].select { |result|
       [result[:winner], result[:loser]].include?(player_id)
     }
