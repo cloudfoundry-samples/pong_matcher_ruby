@@ -3,9 +3,9 @@ require "json"
 require_relative "redis_driver"
 
 db = {
-  match_requests: RedisDriver.new("match_requests"),
-  matches: RedisDriver.new("matches"),
-  results: RedisDriver.new("results"),
+  match_requests: RedisDriver.from_env("match_requests"),
+  matches: RedisDriver.from_env("matches"),
+  results: RedisDriver.from_env("results"),
 }
 
 delete "/all" do

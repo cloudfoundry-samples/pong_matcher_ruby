@@ -6,7 +6,7 @@ class RedisDriverTest < MiniTest::Test
   include CollectionExamples
 
   def setup
-    @coll = RedisDriver.new("test_collection")
+    @coll = RedisDriver.from_env("test_collection")
     @coll.clear
   end
 end

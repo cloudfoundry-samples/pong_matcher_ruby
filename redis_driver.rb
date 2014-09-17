@@ -1,11 +1,42 @@
 require "redis"
 require "psych"
+require "json"
 
 class RedisDriver
   include Enumerable
 
-  def initialize(key)
-    @redis = Redis.new
+  class << self
+    def from_env(key)
+      new(uri, key)
+    end
+
+    private
+
+    def uri
+      if config.has_key?("password")
+        "redis://:#{config["password"]}@#{config["hostname"]}:#{config["port"]}/0"
+      else
+        "redis://#{config["hostname"]}:#{config["port"]}/0"
+      end
+    end
+
+    def config
+      JSON.parse(ENV.fetch("VCAP_SERVICES", default_vcap_services)).
+        fetch("rediscloud")[0].fetch("credentials")
+    end
+
+    def default_vcap_services
+      JSON.generate(
+        "rediscloud" => [
+          { "credentials" => { "hostname" => "localhost",
+                               "port" => "6379" } }
+        ]
+      )
+    end
+  end
+
+  def initialize(uri, key)
+    @redis = Redis.new(url: uri)
     @key = key
   end
 
