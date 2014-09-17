@@ -11,6 +11,7 @@ delete "/all" do
   db[:match_requests].clear
   db[:matches].clear
   db[:results].clear
+  [200, {}, []]
 end
 
 put "/match_requests/:id" do |id|
@@ -93,13 +94,13 @@ def unfulfilled_match_requests(db)
 end
 
 def previous_opponents(db, player_id)
-  previous_opponents = results_involving_player(db, player_id).map { |result|
+  results_involving_player(db, player_id).map { |result|
     result[:winner] == player_id ? result[:loser] : result[:winner]
   }
 end
 
 def results_involving_player(db, player_id)
-  results_involving_player = db[:results].select { |result|
+  db[:results].select { |result|
     [result[:winner], result[:loser]].include?(player_id)
   }
 end
