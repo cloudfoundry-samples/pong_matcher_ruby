@@ -2,4 +2,5 @@
 
 set -ex
 
-exec rake docker:test
+docker build -t andrewbruce/pongruby .
+docker run andrewbruce/pongruby
