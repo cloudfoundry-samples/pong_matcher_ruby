@@ -16,7 +16,7 @@ brew install redis
 redis-server
 ```
 
-Start the application server:
+In another terminal, start the application server:
 
 ```bash
 bundle
