@@ -66,7 +66,7 @@ curl -v -X POST http://localhost:3000/results -d '
 You should get a 201 Created response.
 
 Future requests with different player IDs should not cause a match with someone
-who has already played. The program is not yet useful enough to go back and
-allow people who've already played to play again.
+who has already played. The program is not yet useful enough to
+allow pairs who've already played to play again.
 
 [acceptance-test]:https://github.com/camelpunch/pong_matcher_acceptance
