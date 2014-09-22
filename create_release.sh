@@ -1,3 +1,3 @@
 #!/bin/bash
 
-rake docker:test
+exec rake docker:test
