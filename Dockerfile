@@ -1,17 +1,6 @@
 # DOCKER-VERSION 1.2.0
 
-# base
-FROM    ubuntu:14.04
-RUN     apt-get update
-RUN     apt-get install -qy build-essential wget
-
-# create user
-RUN     adduser --disabled-password web
-
-# redis
-ADD     http://download.redis.io/redis-stable.tar.gz redis-stable.tar.gz
-RUN     tar -zxf redis-stable.tar.gz
-RUN     cd redis-stable; make install
+FROM    $DOCKER_IMAGE
 
 # ruby-install
 ADD     https://github.com/postmodern/ruby-install/archive/v0.4.3.tar.gz ruby-install-0.4.3.tar.gz
