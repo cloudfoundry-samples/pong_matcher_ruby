@@ -1,6 +1,6 @@
 # DOCKER-VERSION 1.2.0
 
-FROM    $DOCKER_IMAGE
+FROM    docker.gocd.cf-app.com:5000/pongbase
 
 # ruby-install
 ADD     https://github.com/postmodern/ruby-install/archive/v0.4.3.tar.gz ruby-install-0.4.3.tar.gz
