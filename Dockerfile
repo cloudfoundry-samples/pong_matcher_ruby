@@ -26,6 +26,7 @@ RUN     cd redis-stable; make install
 RUN     adduser --disabled-password web
 USER    web
 RUN     echo "source /usr/local/share/chruby/chruby.sh" >> /home/web/.profile
+RUN     echo "gem: --no-document" >> /home/web/.gemrc
 
 # install bundler
 RUN     ["/bin/bash", "-cl", "chruby 2.1.2; gem install bundler"]
