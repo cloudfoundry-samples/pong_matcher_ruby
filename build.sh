@@ -1,3 +1,3 @@
 #!/bin/bash
 
-# Do nothing: using MRI Ruby buildpack.
+touch build/distributions/dummy
