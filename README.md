@@ -37,7 +37,7 @@ Export the test host
 HOST=http://mysubdomain.cfapps.io
 ```
 
-Now follow the [interaction instructions](#interaction_instructions).
+Now follow the [interaction instructions](#interaction-instructions).
 
 ## Running locally
 
@@ -63,7 +63,7 @@ Export the test host
 export HOST=http://localhost:3000
 ```
 
-Now follow the [interaction instructions](#interaction_instructions).
+Now follow the [interaction instructions](#interaction-instructions).
 
 ## Interaction instructions
 
