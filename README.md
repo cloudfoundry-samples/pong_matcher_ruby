@@ -34,7 +34,7 @@ cf push -n mysubdomain
 Export the test host
 
 ```bash
-HOST=http://mysubdomain.cfapps.io
+export HOST=http://mysubdomain.cfapps.io
 ```
 
 Now follow the [interaction instructions](#interaction-instructions).
