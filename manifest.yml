@@ -1,0 +1,9 @@
+---
+applications:
+  - name: pong
+    memory: 256M
+    instances: 1
+    path: .
+    command: ruby server.rb
+    services:
+      - baby-redis
