@@ -15,7 +15,7 @@ RUN     tar -zxf ruby-install-0.4.3.tar.gz
 RUN     cd ruby-install-0.4.3; make install
 
 # ruby
-RUN     ruby-install ruby 2.1.2
+RUN     ruby-install ruby 2.1.2 -- --disable-install-doc
 
 # redis
 ADD     http://download.redis.io/redis-stable.tar.gz redis-stable.tar.gz
