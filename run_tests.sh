@@ -2,5 +2,4 @@
 
 set -ex
 
-docker build -t andrewbruce/pongruby .
-docker run andrewbruce/pongruby
+docker run camelpunch/pong-matcher-ruby
