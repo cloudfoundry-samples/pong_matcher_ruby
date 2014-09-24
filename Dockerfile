@@ -1,10 +1,10 @@
 # DOCKER-VERSION 1.2.0
 
-FROM    docker.gocd.cf-app.com:5000/pongbaseruby
+FROM    camelpunch/pong-matcher-base:ruby
 
 # install app as unprivileged user
 USER    web
-COPY    . pong_matcher_ruby
+COPY    app pong_matcher_ruby
 RUN     cd pong_matcher_ruby; bundle
 
 # set entrypoint that runs the unit tests
