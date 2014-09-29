@@ -1,6 +1,6 @@
 # DOCKER-VERSION 1.2.0
 
-FROM    camelpunch/pong-matcher-base:ruby
+FROM    camelpunch/pong-matcher-base-ruby
 
 # install app as unprivileged user
 USER    web
