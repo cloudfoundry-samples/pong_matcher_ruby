@@ -2,8 +2,7 @@
 
 set -xe
 
-docker pull camelpunch/pong-matcher-ruby
-docker run -t camelpunch/pong-matcher-ruby /bin/bash -c "\
+docker run -t docker.gocd.cf-app.com:5000 /bin/bash -c "\
     cd pong_matcher_ruby
     cf auth $CF_USERNAME $CF_PASSWORD &&
     cf target -o $CF_ORG -s $CF_SPACE &&
