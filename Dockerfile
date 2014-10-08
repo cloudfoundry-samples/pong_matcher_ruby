@@ -40,6 +40,3 @@ RUN     cd pong_matcher_ruby; bundle
 
 # run tests as part of build - should fail if tests fail
 RUN     redis-server & cd pong_matcher_ruby; rake
-
-# set up CF endpoint
-RUN     cf api https://api.run.pivotal.io
