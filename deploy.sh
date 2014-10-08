@@ -2,7 +2,7 @@
 
 set -xe
 
-docker run -t docker.gocd.cf-app.com:5000 /bin/bash -c "\
+docker run -t docker.gocd.cf-app.com:5000/pong-matcher-ruby /bin/bash -c "\
     cd pong_matcher_ruby
     cf api https://api.run.pivotal.io
     cf auth $CF_USERNAME $CF_PASSWORD &&
