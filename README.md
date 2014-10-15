@@ -38,7 +38,7 @@ Export the test host
 export HOST=http://mysubdomain.cfapps.io
 ```
 
-Now follow the [interaction instructions](#interaction-instructions).
+Now follow the [interaction instructions][interaction].
 
 ## Running locally
 
@@ -65,7 +65,7 @@ Export the test host
 export HOST=http://localhost:3000
 ```
 
-Now follow the [interaction instructions](#interaction-instructions).
+Now follow the [interaction instructions][interaction].
 
 ## Interaction instructions
 
@@ -117,3 +117,4 @@ allow pairs who've already played to play again.
 
 [acceptance-test]:https://github.com/camelpunch/pong_matcher_acceptance
 [pws]:https://run.pivotal.io
+[interaction]:https://github.com/camelpunch/pong_matcher_grails#interaction-instructions
