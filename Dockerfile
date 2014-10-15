@@ -14,7 +14,7 @@ RUN     tar -zxf redis-stable.tar.gz
 RUN     cd redis-stable; make install
 
 # cf
-ADD     https://cli.run.pivotal.io/stable?release=debian32&source=github cf.deb
+ADD     https://cli.run.pivotal.io/stable?release=debian64&source=github cf.deb
 RUN     dpkg -i cf.deb
 
 # ruby-install
