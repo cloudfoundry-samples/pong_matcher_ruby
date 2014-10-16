@@ -26,6 +26,10 @@ RUN     cd ruby-install-0.4.3; make install
 RUN     ruby-install ruby 2.1.2 -- --disable-install-doc
 RUN     chown -R web:web /opt/rubies/ruby-2.1.2
 
+# install app
+ADD     app pong_matcher_ruby
+RUN     chown -R web:web /pong_matcher_ruby
+
 # become unprivileged
 USER    web
 
@@ -35,7 +39,6 @@ RUN     echo "gem: --no-document" >> /home/web/.gemrc
 RUN     gem install bundler
 
 # install app
-COPY    app pong_matcher_ruby
 RUN     cd pong_matcher_ruby; bundle
 
 # run tests as part of build - should fail if tests fail
