@@ -6,4 +6,4 @@ applications:
     path: .
     command: ruby server.rb
     services:
-      - baby-redis
+      - redis
