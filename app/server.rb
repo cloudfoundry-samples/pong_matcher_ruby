@@ -49,6 +49,15 @@ get "/match_requests/:id" do |match_request_id|
   end
 end
 
+get "/matches/:id" do |match_id|
+  match = db[:matches].detect { |match| match[:id] == match_id }
+  [
+    200,
+    { "Content-Type" => "application/json" },
+    [ match.to_json ]
+  ]
+end
+
 post "/results" do
   result = JSON.parse(request.body.read)
   db[:results] << { match_id: result["match_id"],
