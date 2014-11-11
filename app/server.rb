@@ -31,20 +31,24 @@ put "/match_requests/:id" do |id|
 end
 
 get "/match_requests/:id" do |match_request_id|
-  match_request = db[:match_requests].detect { |match_request| match_request[:id] == match_request_id }
-  found_match = find_unplayed_match(db, match_request)
+  match_request = db[:match_requests].detect { |match_request|
+    match_request[:id] == match_request_id
+  }
 
-  if found_match
+  if match_request
+    found_match = find_unplayed_match(db, match_request) || {}
     [
       200,
       { "Content-Type" => "application/json" },
-      [ { match_id: found_match[:id] }.to_json ]
+      [ { id: match_request[:id],
+          player: match_request[:requester_id],
+          match_id: found_match[:id] }.to_json ]
     ]
   else
     [
       404,
       { "Content-Type" => "application/json" },
-      [ db.to_json ]
+      []
     ]
   end
 end
