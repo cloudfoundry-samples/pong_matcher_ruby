@@ -13,16 +13,18 @@ class RedisDriver
     private
 
     def uri
+      host = config["hostname"] || config["host"]
       if config.has_key?("password")
-        "redis://:#{config["password"]}@#{config["hostname"]}:#{config["port"]}/0"
+        "redis://:#{config["password"]}@#{host}:#{config["port"]}/0"
       else
-        "redis://#{config["hostname"]}:#{config["port"]}/0"
+        "redis://#{host}:#{config["port"]}/0"
       end
     end
 
     def config
-      JSON.parse(ENV.fetch("VCAP_SERVICES", default_vcap_services)).
-        fetch("rediscloud")[0].fetch("credentials")
+      vcap_services = JSON.parse(ENV.fetch("VCAP_SERVICES", default_vcap_services))
+      (vcap_services["rediscloud"] || vcap_services["p-redis"])[0].
+        fetch("credentials")
     end
 
     def default_vcap_services
