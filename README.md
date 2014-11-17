@@ -28,7 +28,6 @@ cf create-service rediscloud 25mb baby-redis
 Push this app. Its manifest assumes you called your Redis instance 'baby-redis'.
 
 ```bash
-cd app
 cf push -n mysubdomain
 ```
 
@@ -54,7 +53,6 @@ redis-server
 In another terminal, start the application server:
 
 ```bash
-cd app
 bundle
 PORT=3000 ruby server.rb
 ```
