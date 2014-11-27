@@ -55,11 +55,20 @@ end
 
 get "/matches/:id" do |match_id|
   match = db[:matches].detect { |match| match[:id] == match_id }
-  [
-    200,
-    { "Content-Type" => "application/json" },
-    [ match.to_json ]
-  ]
+
+  if match
+    [
+      200,
+      { "Content-Type" => "application/json" },
+      [ match.to_json ]
+    ]
+  else
+    [
+      404,
+      { "Content-Type" => "application/json" },
+      []
+    ]
+  end
 end
 
 post "/results" do
