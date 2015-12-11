@@ -22,10 +22,10 @@ cf target -o myorg -s myspace
 Sign up for a rediscloud instance.
 
 ```bash
-cf create-service rediscloud 25mb baby-redis
+cf create-service rediscloud 30mb redis
 ```
 
-Push this app. Its manifest assumes you called your Redis instance 'baby-redis'.
+Push this app. Its manifest assumes you called your Redis instance 'redis'.
 
 ```bash
 cf push -n mysubdomain
